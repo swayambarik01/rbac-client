@@ -16,7 +16,7 @@ const Home = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/login', {
+      const response = await axios.post('http://ec2-75-101-229-145.compute-1.amazonaws.com:3000/api/login', {
         username: loginUsername,
         password: loginPassword,
       });
@@ -31,7 +31,7 @@ const Home = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/signup', {
+      const response = await axios.post('http://ec2-75-101-229-145.compute-1.amazonaws.com:3000/api/signup', {
         username: signupUsername,
         password: signupPassword,
         role,

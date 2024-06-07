@@ -18,14 +18,14 @@ const Profile = () => {
 
       try {
         const authCheckResponse = await axios.post(
-          'http://localhost:3000/api/auth-check',
+          'http://ec2-75-101-229-145.compute-1.amazonaws.com:3000/api/auth-check',
           { path: '/profile' },
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
         if (authCheckResponse.data.access) {
           const profileResponse = await axios.post(
-            'http://localhost:3000/api/profile',
+            'http://ec2-75-101-229-145.compute-1.amazonaws.com:3000/api/profile',
             {},
             { headers: { Authorization: `Bearer ${token}` } }
           );
