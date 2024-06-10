@@ -1,67 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
-  const [profileData, setProfileData] = useState(null);
-  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProfileData = async () => {
+    const fetchProfilePage = async () => {
       const token = localStorage.getItem('token');
       if (!token) {
-        setMessage('No token found, please log in.');
+        alert('No token found, please log in.');
         navigate('/');
         return;
       }
 
       try {
-        const authCheckResponse = await axios.post(
-          'http://ec2-75-101-229-145.compute-1.amazonaws.com:3000/api/auth-check',
-          { path: '/profile' },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        const response = await axios.get('http://localhost:3000/api/profile', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const contentElement = document.getElementById('profileContent');
+        contentElement.innerHTML = response.data;
 
-        if (authCheckResponse.data.access) {
-          const profileResponse = await axios.post(
-            'http://ec2-75-101-229-145.compute-1.amazonaws.com:3000/api/profile',
-            {},
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-          setProfileData(profileResponse.data);
-        } else {
-          setMessage('Access denied');
-          navigate('/');
+        // Extract and run scripts in the loaded HTML
+        const scripts = contentElement.getElementsByTagName('script');
+        for (let script of scripts) {
+          const newScript = document.createElement('script');
+          newScript.textContent = script.textContent;
+          document.body.appendChild(newScript);
         }
       } catch (error) {
-        setMessage('Error: ' + (error.response?.data?.message || 'Unknown error'));
+        alert('Error loading profile page. Redirecting to home.');
         navigate('/');
       }
     };
 
-    fetchProfileData();
+    fetchProfilePage();
   }, [navigate]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/');
-  };
-
-  return (
-    <div>
-      <h1>Profile</h1>
-      {message && <p>{message}</p>}
-      {profileData && (
-        <div>
-          <p>Username: {profileData.username}</p>
-          <p>Role: {profileData.role}</p>
-          <p>Permissions: {profileData.permissions.join(', ')}</p>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      )}
-    </div>
-  );
+  return <div id="profileContent"></div>;
 };
 
 export default Profile;
