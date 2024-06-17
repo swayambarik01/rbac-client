@@ -6,22 +6,22 @@ const Profile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProfilePage = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        alert('No token found, please log in.');
-        navigate('/');
-        return;
-      }
-
+    const loadComponent = async (path, elementId) => {
       try {
-        const response = await axios.get('http://ec2-75-101-229-145.compute-1.amazonaws.com:3000/api/profile', {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          alert('No token found, please log in.');
+          navigate('/');
+          return;
+        }
+
+        const response = await axios.get(`http://ec2-75-101-229-145.compute-1.amazonaws.com:3000/api${path}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        const contentElement = document.getElementById('profileContent');
+        const contentElement = document.getElementById(elementId);
         contentElement.innerHTML = response.data;
 
-        // Extract and run scripts in the loaded HTML
+        // Find and run the scripts in the loaded HTML
         const scripts = contentElement.getElementsByTagName('script');
         for (let script of scripts) {
           const newScript = document.createElement('script');
@@ -29,15 +29,21 @@ const Profile = () => {
           document.body.appendChild(newScript);
         }
       } catch (error) {
-        alert('Error loading profile page. Redirecting to home.');
+        alert(`Error loading ${path} page. Redirecting to home.`);
         navigate('/');
       }
     };
 
-    fetchProfilePage();
+    loadComponent('/profile', 'profileContent');
+    loadComponent('/dashboard', 'dashboardContent');
   }, [navigate]);
 
-  return <div id="profileContent"></div>;
+  return (
+    <div>
+      <div id="profileContent"></div>
+      <div id="dashboardContent"></div>
+    </div>
+  );
 };
 
 export default Profile;
