@@ -28,8 +28,8 @@ const Home = () => {
     loadComponent('/signup', 'signupContent');
 
     const handleLoginSuccess = (event) => {
-      console.log('Login successful, navigating to profile', event.detail);
-      navigate('/profile');
+      console.log('Login successful, navigating to landing page', event.detail);
+      navigate('/landing');
     };
 
     window.addEventListener('loginSuccess', handleLoginSuccess);
@@ -41,6 +41,7 @@ const Home = () => {
 
   return (
     <div>
+      <h1>RBAC Client Home Page</h1>
       <div id="loginContent"></div>
       <div id="signupContent"></div>
     </div>

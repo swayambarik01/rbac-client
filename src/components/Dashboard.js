@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const Profile = () => {
+const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,15 +34,15 @@ const Profile = () => {
       }
     };
 
-    loadComponent('/profile', 'profileContent');
+    loadComponent('/dashboard', 'dashboardContent');
   }, [navigate]);
 
   return (
     <div>
       <button onClick={() => navigate('/landing')}>Back to Landing Page</button>
-      <div id="profileContent"></div>
+      <div id="dashboardContent"></div>
     </div>
   );
 };
 
-export default Profile;
+export default Dashboard;
