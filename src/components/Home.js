@@ -8,7 +8,7 @@ const Home = () => {
   useEffect(() => {
     const loadComponent = async (path, elementId) => {
       try {
-        const response = await axios.get(`http://ec2-75-101-229-145.compute-1.amazonaws.com:3000/api${path}`);
+        const response = await axios.get(`http://localhost:3000/api${path}?style=true`);
         const contentElement = document.getElementById(elementId);
         contentElement.innerHTML = response.data;
 
@@ -39,10 +39,15 @@ const Home = () => {
     };
   }, [navigate]);
 
+  const spacerStyle = {
+    height: '20px', // Adjust the height as needed
+  };
+
   return (
     <div>
       <h1>RBAC Client Home Page</h1>
       <div id="loginContent"></div>
+      <div style={spacerStyle}></div>
       <div id="signupContent"></div>
     </div>
   );

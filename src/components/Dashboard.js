@@ -15,7 +15,7 @@ const Dashboard = () => {
           return;
         }
 
-        const response = await axios.get(`http://ec2-75-101-229-145.compute-1.amazonaws.com:3000/api${path}`, {
+        const response = await axios.get(`http://localhost:3000/api${path}?style=true`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const contentElement = document.getElementById(elementId);
