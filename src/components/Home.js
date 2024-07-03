@@ -45,7 +45,8 @@ const Home = () => {
 
   return (
     <div>
-      <div style={spacerStyle}><h1>RBAC Client Home Page</h1></div>
+      <div style={spacerStyle}></div>
+      <h1>RBAC Client Home Page</h1>
       <div id="loginContent"></div>
       <div style={spacerStyle}></div>
       <div id="signupContent"></div>
