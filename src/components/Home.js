@@ -12,6 +12,7 @@ const Home = () => {
         const contentElement = document.getElementById(elementId);
         contentElement.innerHTML = response.data;
 
+        // Find and run the scripts in the loaded HTML
         const scripts = contentElement.getElementsByTagName('script');
         for (let script of scripts) {
           const newScript = document.createElement('script');
@@ -31,10 +32,10 @@ const Home = () => {
       navigate('/landing');
     };
 
-    window.addEventListener('loginSuccess', handleLoginSuccess);
+    window.addEventListener('rbacLogin', handleLoginSuccess);
 
     return () => {
-      window.removeEventListener('loginSuccess', handleLoginSuccess);
+      window.removeEventListener('rbacLogin', handleLoginSuccess);
     };
   }, [navigate]);
 
@@ -44,6 +45,7 @@ const Home = () => {
 
   return (
     <div>
+      <div style={spacerStyle}></div>
       <h1>RBAC Client Home Page</h1>
       <div id="loginContent"></div>
       <div style={spacerStyle}></div>
