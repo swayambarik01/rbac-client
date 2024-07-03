@@ -8,11 +8,10 @@ const Home = () => {
   useEffect(() => {
     const loadComponent = async (path, elementId) => {
       try {
-        const response = await axios.get(`http://localhost:3000/api${path}?style=true`);
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api${path}?style=true`);
         const contentElement = document.getElementById(elementId);
         contentElement.innerHTML = response.data;
 
-        // Find and run the scripts in the loaded HTML
         const scripts = contentElement.getElementsByTagName('script');
         for (let script of scripts) {
           const newScript = document.createElement('script');

@@ -15,13 +15,12 @@ const Dashboard = () => {
           return;
         }
 
-        const response = await axios.get(`http://localhost:3000/api${path}?style=true`, {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api${path}?style=true`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const contentElement = document.getElementById(elementId);
         contentElement.innerHTML = response.data;
 
-        // Find and run the scripts in the loaded HTML
         const scripts = contentElement.getElementsByTagName('script');
         for (let script of scripts) {
           const newScript = document.createElement('script');
