@@ -44,13 +44,15 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <div style={spacerStyle}></div>
-      <h1>RBAC Client Home Page</h1>
-      <div id="loginContent"></div>
-      <div style={spacerStyle}></div>
-      <div id="signupContent"></div>
-    </div>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+    <div style={{ height: '20px' }}></div>
+    <h1>RBAC Client Home Page</h1>
+    <div style={{ height: '20px' }}></div>
+    <div id="loginContent"></div>
+    <div style={{ height: '20px' }}></div>
+    <div id="signupContent"></div>
+</div>
+
   );
 };
 
