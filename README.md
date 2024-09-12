@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Getting Started with RBAC Client Example
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -14,10 +14,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
 
@@ -29,42 +25,101 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+## RBAC Frontend Integration
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Basic Usage (Total ≈ 25 lines)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### Calling the API
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+To load a component for easy use using the RBAC Module, we suggest creating a `useEffect` in the desired component in the following fashion:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```javascript
+useEffect(() => {
+  // STEP 1: Function to load the HTML content from the backend and insert it into the specified element
+  const loadComponent = async (path, elementId) => {
+    try {
+      const response = await axios.get(`${window.env.REACT_APP_BACKEND_URL}/api${path}`);
+      const contentElement = document.getElementById(elementId);
+      contentElement.innerHTML = response.data;
+      // Find and run the scripts in the loaded HTML
+      const scripts = contentElement.getElementsByTagName('script');
+      for (let script of scripts) {
+        const newScript = document.createElement('script');
+        newScript.textContent = script.textContent;
+        document.body.appendChild(newScript);
+      }
+    } catch (error) {
+      console.error('Error loading page:', error);
+    }
+  };
+  // STEP 2: Load login and signup components
+  loadComponent('/login', 'loginContent');
+  loadComponent('/signup', 'signupContent');
+}, []);
+```
 
-## Learn More
+Using the loadComponent function, for any component you want to get from the RBAC Module, just provide the path and a unique elementId that you can create to reference the component. You can do this for however many components you wish to use from the RBAC Module. Above is an example of how the loadComponent is used to get the login and signup pages from RBAC.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### Using Component in the Frontend
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Insert the component you want to render in a div or section tag with the elementId specified from the loadComponent functions.
 
-### Code Splitting
+```javascript
+return (
+  <div>
+    <div id="loginContent"></div>
+    <div id="signupContent"></div>
+  </div>
+);
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Advanced Usage (Total ≈ 32 lines)
 
-### Analyzing the Bundle Size
+#### Navigating to Other Routes on RBAC Success Action:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Ensure the correct navigation route setup has been done in your App.js or any relevant project files. Then add a navigation object in your desired component.
 
-### Making a Progressive Web App
+```javascript
+const navigate = useNavigate();
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+In the useEffect created in the first step, you can add an event listener to listen for a success event when using RBAC Module Actions.
 
-### Advanced Configuration
+The event to listen will be 'rbacLogin'.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```javascript
+// Event handler for successful login
+const handleLoginSuccess = (event) => {
+  console.log('Login successful, navigating to profile', event.detail);
+  navigate('/profile');
+};
+// Add event listener for login success
+window.addEventListener('rbacLoginSuccess', handleLoginSuccess);
+// Clean up event listener on component unmount
+return () => {
+  window.removeEventListener('rbacLoginSuccess', handleLoginSuccess);
+};
+```
 
-### Deployment
+Add the navigate object you created to the dependency array of the useEffect.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```javascript
+useEffect(() => {
+  // ...existing loadComponent logic...
 
-### `npm run build` fails to minify
+  // Event handler for successful login
+  const handleLoginSuccess = (event) => {
+    console.log('Login successful, navigating to profile', event.detail);
+    navigate('/profile');
+  };
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+  // Add event listener for login success
+  window.addEventListener('rbacLoginSuccess', handleLoginSuccess);
+
+  // Clean up event listener on component unmount
+  return () => {
+    window.removeEventListener('rbacLoginSuccess', handleLoginSuccess);
+  };
+}, [navigate]);
+```
+By following the instructions in this README, you should be able to integrate the RBAC frontend easily and efficiently into your project. If you have any questions or run into issues, please contact repo owner.

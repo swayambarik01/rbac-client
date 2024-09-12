@@ -37,7 +37,7 @@ const Profile = () => {
   }, [navigate]);
 
   return (
-    <div>
+    <div style={{ width: '70%', margin: '0 auto' }}>
       <button onClick={() => navigate('/landing')}>Back to Landing Page</button>
       <div id="profileContent"></div>
     </div>
