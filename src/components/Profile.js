@@ -45,8 +45,7 @@ const Profile = () => {
       display: 'flex', 
       flexDirection: 'column',
       justifyContent: 'center', 
-      alignItems: 'center',
-      height: '100vh',  // Full viewport height for vertical centering
+      alignItems: 'center',  // Full viewport height for vertical centering
       textAlign: 'center'  // Center text horizontally
     }}>
       <button onClick={() => navigate('/landing')}>Back to Landing Page</button>
