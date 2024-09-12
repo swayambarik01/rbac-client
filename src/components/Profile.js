@@ -38,22 +38,19 @@ const Profile = () => {
 
   return (
     <div style={{ 
+      maxWidth: '70%', 
+      width: '100%', 
+      margin: '0 auto', 
+      boxSizing: 'border-box',
       display: 'flex', 
+      flexDirection: 'column',
       justifyContent: 'center', 
-      alignItems: 'center', 
-      height: '100vh',  // Full viewport height
-      backgroundColor: '#f0f0f0'  // Optional: background color for better visibility
+      alignItems: 'center',
+      height: '100vh',  // Full viewport height for vertical centering
+      textAlign: 'center'  // Center text horizontally
     }}>
-      <div style={{ 
-        maxWidth: '70%', 
-        width: '100%', 
-        margin: '0 auto', 
-        boxSizing: 'border-box',
-        textAlign: 'center'  // Center the text and content inside the inner div
-      }}>
-        <button onClick={() => navigate('/landing')}>Back to Landing Page</button>
-        <div id="profileContent"></div>
-      </div>
+      <button onClick={() => navigate('/landing')}>Back to Landing Page</button>
+      <div id="profileContent"></div>
     </div>
   );
 };
